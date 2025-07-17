@@ -11,11 +11,14 @@ waiting_for_photo = set()  # stores user_ids who are about to submit
 user_points = {}       # maps user_id to points
 waiting_for_photo = set()  # set of user_ids who used /submit
 poll_buffers = {}  # user_id -> list of photo file_ids
+poll_questions = {}  # user_id -> question text
 waiting_for_poll_photos = set()  # user_ids currently uploading photos
 all_users = set()
 seen_photos = {}       # user_id -> set of message_ids they've seen via /feed
 commented_photos = {}  # user_id -> set of message_ids they've commented on
 poll_groups = []  # List of poll submissions, each as a dict: {user_id, photo_ids, poll_message_id, options, votes}
+last_submission = {}  # user_id -> {'type': 'photo' or 'poll', 'index': int}
+
 
 
 
@@ -42,7 +45,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def submit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     waiting_for_photo.add(user_id)
-    await update.message.reply_text("Please send me a photo you'd like to submit.")
+    await update.message.reply_text(
+        "📸 Please send me the photo you'd like to submit.\n"
+        "📝 You can include a question in the caption (e.g. 'Which hairstyle is better for me?')."
+    )
 
 #points system
 async def handle_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -148,8 +154,11 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     'message_id': message_id,
     'chat_id': update.message.chat_id,
     'is_poll': False,
-    'comments': 0
+    'comments': 0,
+    'question': update.message.caption if update.message.caption else "Reply to this photo to leave feedback and earn points!"
  })
+
+    last_submission[user_id] = {'type': 'photo', 'index': len(submitted_photos) - 1}
 
     user_points[user_id] = user_points.get(user_id, 0) - 1
     await update.message.reply_text("✅ Your photo has been submitted!")
@@ -333,7 +342,7 @@ async def feed(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sent_message = await context.bot.send_photo(
             chat_id=update.effective_chat.id,
             photo=photo['file_id'],
-            caption="Reply to this photo to leave feedback and earn points!"
+            caption=photo.get('question', "Reply to this photo to leave feedback and earn points!")
         )
 
         seen_photos.setdefault(user_id, set()).add(photo['file_id'])
@@ -403,7 +412,8 @@ async def pollme(update: Update, context: ContextTypes.DEFAULT_TYPE):
     waiting_for_poll_photos.add(user_id)
     await update.message.reply_text(
         "📸 Please send up to 10 photos you'd like to include in the poll.\n"
-        "When you're done, send /donepoll."
+         "📝 You can also include a question: just send a message *before* the photos with the question you want voters to see.\n"
+         "When you're done, send /donepoll."
     )
 
 
@@ -444,6 +454,8 @@ async def donepoll(update: Update, context: ContextTypes.DEFAULT_TYPE):
         'vote_count': 0
     })
 
+    last_submission[user_id] = {'type': 'poll', 'index': len(poll_groups) - 1}
+
 
     # Step 1: Send album of photos
     media_group = [InputMediaPhoto(photo_id) for photo_id in photo_ids]
@@ -453,9 +465,10 @@ async def donepoll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     options = [f"Photo {i+1}" for i in range(len(photo_ids))]
 
     # Step 3: Send anonymous poll
+    question_text = poll_questions.get(user_id, "🗳️ Which photo(s) do you like the most?")
     poll_message = await context.bot.send_poll(
         chat_id=update.effective_chat.id,
-        question="🗳️ Which photo(s) do you like the most best?",
+        question=question_text,
         options=options,
         is_anonymous=False,
         allows_multiple_answers=True
@@ -463,6 +476,8 @@ async def donepoll(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     poll_groups[-1]['poll_id'] = poll_message.poll.id
     poll_groups[-1]['poll_message_id'] = poll_message.message_id
+    poll_questions.pop(user_id, None)
+
 
     user_points[user_id] = user_points.get(user_id, 0) - 1
     await update.message.reply_text(
@@ -562,6 +577,81 @@ async def feed_from_poll_vote(context: ContextTypes.DEFAULT_TYPE, user_id: int):
 
 
 
+async def save_poll_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+
+    if user_id in waiting_for_poll_photos:
+        poll_questions[user_id] = update.message.text
+        await update.message.reply_text("✅ Your question has been saved. Now send up to 10 photos.")
+
+
+
+#Delete function
+async def delete_last(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+
+    if user_id not in last_submission:
+        await update.message.reply_text("❌ You have no recent photo or poll to delete.")
+        return
+
+    last = last_submission[user_id]
+
+    if last['type'] == 'photo':
+        try:
+            photo = submitted_photos[last['index']]
+            if photo['user_id'] != user_id:
+                raise Exception("Permission error")
+
+            submitted_photos.pop(last['index'])
+            await update.message.reply_text("🗑️ Your last submitted photo has been deleted.")
+        except Exception as e:
+            await update.message.reply_text("❌ Could not delete photo.")
+            print(f"Error deleting photo: {e}")
+
+    elif last['type'] == 'poll':
+        try:
+            poll = poll_groups[last['index']]
+            if poll['user_id'] != user_id:
+                raise Exception("Permission error")
+
+            poll_groups.pop(last['index'])
+            await update.message.reply_text("🗑️ Your last poll has been deleted.")
+        except Exception as e:
+            await update.message.reply_text("❌ Could not delete poll.")
+            print(f"Error deleting poll: {e}")
+
+    # Remove record of last submission
+    last_submission.pop(user_id, None)
+
+
+
+#Clear function
+async def clear_user_content(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+
+    # 🧹 Delete all photos by this user
+    before_photos = len(submitted_photos)
+    submitted_photos[:] = [p for p in submitted_photos if p['user_id'] != user_id]
+    after_photos = len(submitted_photos)
+    deleted_photos = before_photos - after_photos
+
+    # 🧹 Delete all polls by this user
+    before_polls = len(poll_groups)
+    poll_groups[:] = [p for p in poll_groups if p['user_id'] != user_id]
+    after_polls = len(poll_groups)
+    deleted_polls = before_polls - after_polls
+
+    # Remove last submission tracking
+    if user_id in last_submission:
+        del last_submission[user_id]
+
+    if deleted_photos == 0 and deleted_polls == 0:
+        await update.message.reply_text("⚠️ You have no submitted photos or polls to delete.")
+    else:
+        await update.message.reply_text(
+            f"🗑️ Deleted {deleted_photos} photo(s) and {deleted_polls} poll(s) from your submissions."
+        )
+
 
 # launch the bot
 if __name__ == '__main__':
@@ -569,11 +659,15 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler('start', start))
     app.add_handler(CommandHandler('submit', submit))
     app.add_handler(PollAnswerHandler(handle_poll_answer))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.REPLY, save_poll_question))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     app.add_handler(MessageHandler(filters.TEXT & filters.REPLY, handle_reply))
     app.add_handler(CommandHandler('feed', feed))
     app.add_handler(CommandHandler('points', points))
+    app.add_handler(CommandHandler('delete', delete_last))
+    app.add_handler(CommandHandler('clear', clear_user_content))
     app.add_handler(CommandHandler('pollme', pollme))
     app.add_handler(CommandHandler('donepoll', donepoll))
     print("Bot is running...")
+    print("🚀 Bot updated and running!")
     app.run_polling()
