@@ -5,8 +5,8 @@ MONOBANK_LINK = "https://send.monobank.ua/jar/mvaEKosuB"  # посилання �
 
 messages = {
     'start': {
-        'en': "👋 Hello, {name}! You start with 50 points.\nUse /submit or /pollme or /celebrity_match to get feedback. Press /rules for more",
-        'uk': "👋 Привіт, {name}! У тебе на балансі 50 балів.\nВикористовуй /submit, /pollme чи /celebrity_match, щоб отримати відгук. Можеш ознайомитися з правилами в /rules"
+        'en': "👋 Hello, {name}! You start with 50 points.\nUse /submit, /pollme, or /celebrity_match to get feedback. Use /feed to rate others.\nPress /rules for more info.\nTAG the photo when you respond in /feed.",
+        'uk': "👋 Привіт, {name}! У тебе на балансі 50 балів.\nВикористовуй /submit, /pollme чи /celebrity_match, щоб отримати відгук. Введи /feed, щоб оцінити інших.\nМожеш ознайомитися з правилами в /rules.\nТЕГАЙ фото, коли відповідаєш у /feed."
     },
     'submit_prompt': {
         'en': "📸 Please send a photo and (optional) caption.\nExample: What haircut suits me best?",
