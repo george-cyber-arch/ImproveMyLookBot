@@ -683,7 +683,7 @@ async def donepoll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     options = [f"Photo {i+1}" for i in range(len(photo_ids))]
 
     # Step 3: Send anonymous poll
-    custom_question = context.user_data.get(f'poll_question_{user_id}')
+    custom_question = context.user_data.get(f'poll_question_{user_id}').strip()
     if not custom_question:
         custom_question = tr(lang, 'poll_question')  # fallback to default
 
