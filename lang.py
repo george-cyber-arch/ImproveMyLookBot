@@ -294,7 +294,7 @@ messages = {
             "You start with 50 points. Each submission costs 15 points. If others vote in your poll, it also deducts points. You earn +1 point for voting and +2 points for commenting.\n\n"
             "/points – check your balance\n"
             "`/delete_last` – delete your last post\n"
-            "/`delete_all` – delete all your posts\n"
+            "`/delete_all` – delete all your posts\n"
             "/report – report a post\n\n"
             "/celebrity_match → /paid – get a match for 20₴, then send your photo\n\n"
             "/`buy_points` – buy 500 points for 20₴"
