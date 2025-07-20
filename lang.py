@@ -5,12 +5,23 @@ MONOBANK_LINK = "https://send.monobank.ua/jar/mvaEKosuB"  # посилання �
 
 messages = {
     'start': {
-        'en': "👋 Hello, {name}! You start with 50 points.\nUse /submit, /pollme, or /celebrity_match to get feedback. Use /feed to rate others.\nPress /rules for more info.\nTAG the photo when you respond in /feed.",
-        'uk': "👋 Привіт, {name}! У тебе на балансі 50 балів.\nВикористовуй /submit, /pollme чи /celebrity_match, щоб отримати відгук. Введи /feed, щоб оцінити інших.\nМожеш ознайомитися з правилами в /rules.\nТЕГАЙ фото, коли відповідаєш у /feed."
+        'en': "👋 {name}, you have 50 points.\n"
+        "/submit – send a photo\n"
+        "/pollme – create a poll\n"
+        "/feed – view others\n"
+        "/rules – how it works",
+
+        'uk': "👋 {name}, у тебе 50 балів.\n"
+        "/submit – надіслати фото\n"
+        "/pollme – створити опитування\n"
+        "/feed – переглянути інших\n"
+        "/rules – як це працює"
     },
     'submit_prompt': {
-        'en': "📸 Please send a photo and (optional) caption.\nExample: What haircut suits me best?",
-        'uk': "📸 Надішліть фото та (за бажанням) підпис.\nПриклад: Яка зачіска мені більше пасує?"
+        'en': "📸 Send a photo and (if you want) a caption.\n"
+        "💰 It costs 15 points. People will comment anonymously.",
+        'uk': "📸 Надішли фото і (якщо хочеш) підпис.\n"
+        "💰 Це коштує 15 балів. Люди коментуватимуть анонімно."
     },
     'banned': {
         'en': "🚫 You are banned from using this bot.",
@@ -103,12 +114,12 @@ messages = {
         'uk': "Не вдалося сповістити користувача {uid}: {error}"
     },
     'photo_submitted': {
-        'en': "✅ Your photo has been submitted!",
-        'uk': "✅ Твоє фото надіслано!"
+        'en': "✅ Your photo has been submitted! Look now at others on /feed while waiting for comments!",
+        'uk': "✅ Твоє фото надіслано! Переглянь інших у /feed поки чекаєш відгук!"
     },
     'poll_question_saved': {
-        'en': "✅ Question saved. Now send your photos and use /donepoll when ready.",
-         'uk': "✅ Питання збережено. Тепер надішли свої фото і введи /donepoll, коли будеш готовий."
+       'en': "✅ Question saved. Now send up to 10 photos in one message, then type /donepoll.",
+       'uk': "✅ Питання збережено. Тепер надішли до 10 фото одним повідомленням, а потім введи /donepoll."
     },
     'reply_no_match': {
         'en': "❌ This reply doesn't match any submitted photo.",
@@ -139,8 +150,8 @@ messages = {
         'uk': "🔻 Ви отримали 3 коментарі до свого(їх) фото. 1 бал було списано."
     },
     'feed_photo_caption': {
-        'en': "Reply to this photo to leave feedback and earn more points! Press /feed if you have already seen it.",
-        'uk': "Відповідай на це фото, щоб залишити відгук і заробити бали! Натисніть /feed, якщо вже бачили це фото."
+        'en': "Tag to reply or press /feed if seen or commented.",
+        'uk': "Тегніть, щоб відповісти, або натисніть /feed, якщо вже бачили чи коментували."
     },
     'no_more_photos': {
         'en': "📭 You've rated all available photos. Check back later!",
@@ -155,12 +166,8 @@ messages = {
         'uk': "Жодного фото ще не надіслано."
     },
     'feed_instructions': {
-        'en': "🪙 You get +1 point for voting in a poll and +2 points for leaving a short comment.\n"
-              "🧠 Say what is already good and what could be improved.\n"
-              "👁️ If you see the same photo again – type /feed or just respond 'Seen'.",
-        'uk': "🪙 Ви отримуєте +1 бал за голосування в опитуванні та +2 бали за короткий коментар.\n"
-              "🧠 Скажіть, що вже добре, а що можна покращити.\n"
-              "👁️ Якщо ви бачите те саме фото знову – натисніть /feed або просто відповідайте 'Бачив'."
+        'en': "🏷️ TAG the photo to answer or press /feed if seen.",
+        'uk': "🏷️ ТЕГАЙ фото, щоб відповісти, або натисни /feed, якщо вже бачив."
     },
     'all_photos_seen': {
         'en': "📭 You've seen all available photos. Check back later!",
@@ -171,20 +178,16 @@ messages = {
         'uk': "💬 Відповідай з відгуком, щоб заробити 2 бали або натисни /feed!"
     },
     'poll_voted_press_feed': {
-        'en': "🗳️ When you voted (or already voted for this poll), just press /feed again to get a new one.",
-        'uk': "🗳️ Коли ви проголосували (або вже голосували за це опитування), просто натисніть /feed, щоб отримати нове."
+        'en': "🗳️ Press /feed to see next.",
+        'uk': "🗳️ Натисни /feed, щоб побачити наступне."
     },
     'points': {
         'en': "🏆 You have {points} point(s).",
         'uk': "🏆 У вас {points} бал(ів)."
     },
     'poll_photo_instructions': {
-        'en': "📸 Please send up to 10 photos you'd like to include in the poll. (Vote too to see full results later)\n"
-              "💬 You can also send a text message with your question (before or after the photos).\n"
-              "✅ When you're done, send /donepoll.",
-        'uk': "📸 Надішліть до 10 фото, які ви хочете включити в опитування. (Голосуйте також, щоб побачити повні результати пізніше)\n"
-              "💬 Ви також можете надіслати текстове повідомлення з вашим запитанням (до або після фото).\n"
-              "✅ Коли закінчите, надішліть /donepoll."
+        'en': "📝 Write a question for a poll.",
+        'uk': "📝 Напиши запитання для опитування."
     },
     'not_enough_points_poll': {
         'en': "❌ You need at least 15 points to create a poll.\n"
@@ -205,8 +208,8 @@ messages = {
         'uk': "🗳️ Яке/які фото вам найбільше подобається(ються)?"
     },
     'poll_sent': {
-        'en': "✅ Poll sent",
-        'uk': "✅ Опитування надіслано"
+        'en': "✅ Poll sent – 15 points used. Check your /feed while waiting for votes.",
+        'uk': "✅ Опитування надіслано – списано 15 балів. Перегляньте свій /feed, поки чекаєте на голоси."
     },
     'please_vote': {
         'en': "🗳️ Please vote in the poll!",
@@ -284,54 +287,30 @@ messages = {
     },
     'help_message': {
         'en': (
-            "📜 *ImproveMyLook Bot – Rules & Commands*\n\n"
-            "1. 👋 You start with *50 points*.\n\n"
-            "2. 💰 *Earn points* by helping others:\n"
-            "   • +1 point for *voting* in polls\n"
-            "   • +2 points for *commenting* on photos\n\n"
-            "3. ❌ *Spend 15 points* to:\n"
-            "   • Submit a photo → `/submit`\n"
-            "   • Create a poll → `/pollme` (then `/donepoll`)\n\n"
-            "4. 🧠 Use `/feed` to:\n"
-            "   • View random photos or polls\n"
-            "   • 💬 Reply to photos (*+2 points*)\n"
-            "   • 🗳️ Vote in polls (*+1 point*)\n"
-            "   _(You won’t see your own or repeated photos.)_\n\n"
-            "5. 📊 Check your points with `/points`\n\n"
-            "6. 🧹 Delete your content:\n"
-            "   • `/delete_last` – your latest submission (no refund)\n"
-            "   • `/delete_all` – all your photos and polls\n\n"
-            "7. 🚩 Report bad content by replying with `/report`\n\n"
-            "8. 🌟 *Celebrity Match (20₴)*:\n"
-            "   • Start with `/celebrity_match`\n"
-            "   • Confirm with `/paid`\n"
-            "   • Then send your photo for analysis\n\n"
-            "9. 💸 Need more points? Use `/buy_points` to get 500 points for 20₴."
+            "*ImproveMyLook Bot – Commands & Rules*\n\n"
+            "/submit – send a photo\n"
+            "/pollme → /donepoll – create a poll\n"
+            "/feed – view others, vote, and comment\n\n"
+            "You start with 50 points. Each submission costs 15 points. If others vote in your poll, it also deducts points. You earn +1 point for voting and +2 points for commenting.\n\n"
+            "/points – check your balance\n"
+            "/delete_last – delete your last post\n"
+            "/delete_all – delete all your posts\n"
+            "/report – report a post\n\n"
+            "/celebrity_match → /paid – get a match for 20₴, then send your photo\n\n"
+            "/buy_points – buy 500 points for 20₴"
         ),
         'uk': (
-            "📜 *ImproveMyLook Bot – Правила та Команди*\n\n"
-            "1. 👋 Ви починаєте з *50 балів*.\n\n"
-            "2. 💰 *Заробляйте бали*, допомагаючи іншим:\n"
-            "   • +1 бал за *голосування* в опитуваннях\n"
-            "   • +2 бали за *коментування* фото\n\n"
-            "3. ❌ *Витрачайте 15 балів*, щоб:\n"
-            "   • Надіслати фото → `/submit`\n"
-            "   • Створити опитування → `/pollme` (потім `/donepoll`)\n\n"
-            "4. 🧠 Використовуйте `/feed`, щоб:\n"
-            "   • Переглядати рандомні фото або опитування\n"
-            "   • 💬 Відповідати на фото (*+2 бали*)\n"
-            "   • 🗳️ Голосувати в опитуваннях (*+1 бал*)\n"
-            "   _(Ви не побачите своїх власних або повторюваних фото.)_\n\n"
-            "5. 📊 Перевіряйте свої бали з `/points`\n\n"
-            "6. 🧹 Видаляйте свій контент:\n"
-            "   • `/delete_last` – ваше останнє надсилання\n"
-            "   • `/delete_all` – всі ваші фото та опитування\n\n"
-            "7. 🚩 Повідомляйте про поганий контент з `/report`\n\n"
-            "8. 🌟 *Celebrity Match (20₴)*:\n"
-            "   • Почніть з `/celebrity_match`\n"
-            "   • Підтвердіть з `/paid`\n"
-            "   • Потім надішліть своє фото для аналізу\n\n"
-            "9. 💸 Потрібно більше балів? Використовуйте `/buy_points`, щоб отримати 500 балів всього за 20₴."
+            "*ImproveMyLook Bot – Команди та Правила*\n\n"
+            "/submit – надіслати фото\n"
+            "/pollme → /donepoll – створити опитування\n"
+            "/feed – переглянути інших, голосувати та коментувати\n\n"
+            "Ви починаєте з 50 балів. Кожне надсилання коштує 15 балів. Якщо інші голосують у вашому опитуванні, це також списує бали. Ви заробляєте +1 бал за голосування та +2 за коментування.\n\n"
+            "/points – перевірити свій баланс\n"
+            "/delete_last – видалити останній пост\n"
+            "/delete_all – видалити всі ваші пости\n"
+            "/report – поскаржитися на пост\n\n"
+            "/celebrity_match → /paid – отримати метч за 20₴, потім надішліть своє фото\n\n"
+            "/buy_points – купити 500 балів за 20₴" 
         )
     },
     'buy_points': {

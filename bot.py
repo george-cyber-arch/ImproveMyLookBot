@@ -82,11 +82,11 @@ async def handle_language_choice(update: Update, context: ContextTypes.DEFAULT_T
     if "Українська" in text:
         context.user_data['lang'] = 'uk'
         lang = 'uk'
-        await update.message.reply_text("✅ Мову змінено на українську! Введіть /start, щоб розпочати", reply_markup=ReplyKeyboardRemove())
+        await update.message.reply_text("✅ Мову змінено на українську!", reply_markup=ReplyKeyboardRemove())
     elif "English" in text:
         context.user_data['lang'] = 'en'
         lang = 'en'
-        await update.message.reply_text("✅ Language set to English! Press /start to begin", reply_markup=ReplyKeyboardRemove())
+        await update.message.reply_text("✅ Language set to English!", reply_markup=ReplyKeyboardRemove())
     else:
         return
 
@@ -108,21 +108,10 @@ async def handle_language_choice(update: Update, context: ContextTypes.DEFAULT_T
 
 
 
-
-
-
-
-
-
-
 import os
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 ADMIN_USER_ID = 924475051  # 👈 Replace with your actual Telegram user ID
 banned_users = set()
-
-
-
-
 
 
 # /start
@@ -683,9 +672,12 @@ async def donepoll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     options = [f"Photo {i+1}" for i in range(len(photo_ids))]
 
     # Step 3: Send anonymous poll
-    custom_question = context.user_data.get(f'poll_question_{user_id}').strip()
+    custom_question = context.user_data.get(f'poll_question_{user_id}')
     if not custom_question:
+        lang = context.user_data.get('lang', 'en')
         custom_question = tr(lang, 'poll_question')  # fallback to default
+    else:
+        custom_question = custom_question.strip()
 
     poll_message = await context.bot.send_poll(
         chat_id=update.effective_chat.id,
@@ -694,6 +686,8 @@ async def donepoll(update: Update, context: ContextTypes.DEFAULT_TYPE):
         is_anonymous=False,
         allows_multiple_answers=True
     )
+
+    context.user_data.pop(f'poll_question_{user_id}', None)
 
     poll_groups[-1]['poll_id'] = poll_message.poll.id
     poll_groups[-1]['poll_message_id'] = poll_message.message_id
