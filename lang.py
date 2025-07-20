@@ -296,8 +296,8 @@ messages = {
             "`/delete_last` – delete your last post\n"
             "`/delete_all` – delete all your posts\n"
             "/report – report a post\n\n"
-            "/celebrity_match → /paid – get a match for 20₴, then send your photo\n\n"
-            "/`buy_points` – buy 500 points for 20₴"
+            "`/celebrity_match` → /paid – get a match for 20₴, then send your photo\n\n"
+            "`/buy_points` – buy 500 points for 20₴"
         ),
         'uk': (
             "*ImproveMyLook Bot – Команди та Правила*\n\n"
