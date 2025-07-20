@@ -45,17 +45,18 @@ paid_users = set()
 DATA_FILE = '/persistent/data.json'
 
 
-if not os.path.exists(DATA_FILE):
-    with open(DATA_FILE, 'w') as f:
-        json.dump({
-            'user_points': {},
-            'submitted_photos': [],
-            'poll_groups': [],
-            'paid_users': [],
-            'banned_users': [],
-            'seen_photos': {},
-            'commented_photos': {}
-        }, f, default=str)
+def ensure_data_file():
+    if not os.path.exists(DATA_FILE) or os.stat(DATA_FILE).st_size == 0:
+        with open(DATA_FILE, 'w') as f:
+            json.dump({
+                'user_points': {},
+                'submitted_photos': [],
+                'poll_groups': [],
+                'paid_users': [],
+                'banned_users': [],
+                'seen_photos': {},
+                'commented_photos': {}
+            }, f, default=str)
 
 
 def save_data():
@@ -70,9 +71,9 @@ def save_data():
             'commented_photos': {k: list(v) for k, v in commented_photos.items()}
         }, f, default=str)
 
+
 def load_data():
-    if not os.path.exists(DATA_FILE):
-        return
+    ensure_data_file()
 
     global user_points, submitted_photos, poll_groups, paid_users, banned_users, seen_photos, commented_photos
 
@@ -85,6 +86,7 @@ def load_data():
         banned_users = set(data.get('banned_users', []))
         seen_photos = {int(k): set(v) for k, v in data.get('seen_photos', {}).items()}
         commented_photos = {int(k): set(v) for k, v in data.get('commented_photos', {}).items()}
+
 
 
 
