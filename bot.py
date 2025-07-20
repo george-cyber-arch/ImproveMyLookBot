@@ -44,6 +44,20 @@ paid_users = set()
 
 DATA_FILE = '/persistent/data.json'
 
+
+if not os.path.exists(DATA_FILE):
+    with open(DATA_FILE, 'w') as f:
+        json.dump({
+            'user_points': {},
+            'submitted_photos': [],
+            'poll_groups': [],
+            'paid_users': [],
+            'banned_users': [],
+            'seen_photos': {},
+            'commented_photos': {}
+        }, f, default=str)
+
+
 def save_data():
     with open(DATA_FILE, 'w') as f:
         json.dump({
