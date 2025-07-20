@@ -42,7 +42,7 @@ paid_users = set()
 
 
 
-DATA_FILE = 'data.json'
+DATA_FILE = '/persistent/data.json'
 
 def save_data():
     with open(DATA_FILE, 'w') as f:

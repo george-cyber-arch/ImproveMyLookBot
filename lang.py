@@ -293,11 +293,11 @@ messages = {
             "/feed – view others, vote, and comment\n\n"
             "You start with 50 points. Each submission costs 15 points. If others vote in your poll, it also deducts points. You earn +1 point for voting and +2 points for commenting.\n\n"
             "/points – check your balance\n"
-            "/delete_last – delete your last post\n"
-            "/delete_all – delete all your posts\n"
+            "`/delete_last` – delete your last post\n"
+            "/`delete_all` – delete all your posts\n"
             "/report – report a post\n\n"
             "/celebrity_match → /paid – get a match for 20₴, then send your photo\n\n"
-            "/buy_points – buy 500 points for 20₴"
+            "/`buy_points` – buy 500 points for 20₴"
         ),
         'uk': (
             "*ImproveMyLook Bot – Команди та Правила*\n\n"
@@ -306,11 +306,11 @@ messages = {
             "/feed – переглянути інших, голосувати та коментувати\n\n"
             "Ви починаєте з 50 балів. Кожне надсилання коштує 15 балів. Якщо інші голосують у вашому опитуванні, це також списує бали. Ви заробляєте +1 бал за голосування та +2 за коментування.\n\n"
             "/points – перевірити свій баланс\n"
-            "/delete_last – видалити останній пост\n"
-            "/delete_all – видалити всі ваші пости\n"
+            "/`delete_last` – видалити останній пост\n"
+            "/`delete_all` – видалити всі ваші пости\n"
             "/report – поскаржитися на пост\n\n"
-            "/celebrity_match → /paid – отримати метч за 20₴, потім надішліть своє фото\n\n"
-            "/buy_points – купити 500 балів за 20₴" 
+            "/`celebrity_match` → /paid – отримати метч за 20₴, потім надішліть своє фото\n\n"
+            "/`buy_points` – купити 500 балів за 20₴" 
         )
     },
     'buy_points': {
